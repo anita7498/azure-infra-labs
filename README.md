@@ -1,1 +1,1 @@
-# azure-infra-labs
+# azure-infra-labs project with GitHub Actions
