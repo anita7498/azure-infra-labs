@@ -14,8 +14,8 @@ provider "azurerm" {
 terraform {
   backend "azurerm" {
     resource_group_name  = "dev-iam-rg"
-    storage_account_name = "deviamstorageacct"
-    container_name       = "iam-tfstate"
+    storage_account_name = "deviamstorageacctv1"
+    container_name       = "dev-iam-tfstate"
     key                  = "terraform.tfstate"
   }
 }
