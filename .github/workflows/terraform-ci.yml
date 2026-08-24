@@ -3,7 +3,7 @@ name: Terraform CI
 on:
   push:
     branches:
-      - 'feature/**'
+      - "feature/**"
 
 jobs:
   terraform-ci:
@@ -20,20 +20,21 @@ jobs:
         run: terraform fmt -check
 
       - name: Debug Azure environment
-  shell: powershell
-  run: |
-    Write-Host "=== Azure CLI ==="
-    az account show
-    if ($LASTEXITCODE -ne 0) {
-      Write-Host "Azure CLI is NOT logged in"
-    }
+        shell: powershell
+        run: |
+          Write-Host "=== Azure CLI ==="
+          az account show
+          if ($LASTEXITCODE -ne 0) {
+            Write-Host "Azure CLI is NOT logged in"
+            $global:LASTEXITCODE = 0
+          }
 
-    Write-Host "=== Relevant environment variable names ==="
-    Get-ChildItem Env: |
-      Where-Object {
-        $_.Name -match "^(ARM_|AZURE_|ACTIONS_|GITHUB_)"
-      } |
-      Select-Object Name
+          Write-Host "=== Relevant environment variable names ==="
+          Get-ChildItem Env: |
+            Where-Object {
+             $_.Name -match "^(ARM_|AZURE_|ACTIONS_|GITHUB_)"
+          } |
+          Select-Object Name
 
       - name: Terraform Init
         run: terraform init
