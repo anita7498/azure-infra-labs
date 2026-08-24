@@ -19,11 +19,6 @@ jobs:
       - name: Terraform Format Check
         run: terraform fmt -check
 
-      - name: Check runner identity
-        run: | 
-          whoami
-          az account show
-
       - name: Terraform Init
         run: terraform init
 
