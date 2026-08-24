@@ -9,6 +9,10 @@ jobs:
   terraform-ci:
     runs-on: self-hosted
 
+    defaults:
+      run:
+        working-directory: infra
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -18,25 +22,17 @@ jobs:
         with:
           terraform_wrapper: false
 
-      - name: Terraform Format Check
-        run: terraform fmt -check
-
-      - name: Debug Azure environment
+      - name: Check working directory
         shell: powershell
         run: |
-          Write-Host "=== Azure CLI ==="
-          az account show
-          if ($LASTEXITCODE -ne 0) {
-            Write-Host "Azure CLI is NOT logged in"
-            $global:LASTEXITCODE = 0
-          }
+          Write-Host "Current directory:"
+          Get-Location
 
-          Write-Host "=== Relevant environment variable names ==="
-          Get-ChildItem Env: |
-            Where-Object {
-             $_.Name -match "^(ARM_|AZURE_|ACTIONS_|GITHUB_)"
-          } |
-          Select-Object Name
+          Write-Host "`nFiles:"
+          Get-ChildItem
+
+      - name: Terraform Format Check
+        run: terraform fmt -check
 
       - name: Terraform Init
         run: terraform init -reconfigure
