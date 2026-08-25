@@ -20,24 +20,13 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          creds: |
-            {
-              "clientId": "${{ secrets.AZURE_CLIENT_ID }}",
-              "clientSecret": "${{ secrets.AZURE_CLIENT_SECRET }}",
-              "tenantId": "${{ secrets.AZURE_TENANT_ID }}"
-            }
-          allow-no-subscriptions: true
-
+      - name: Terraform Format Check
+        run: terraform fmt -check
+      
       - name: Check Azure Account
         shell: powershell
         run: |
           az account show
-
-      - name: Terraform Format Check
-        run: terraform fmt -check
 
       - name: Terraform Init
         run: terraform init
