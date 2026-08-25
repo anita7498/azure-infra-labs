@@ -24,6 +24,8 @@ jobs:
       # Install and configure the Terraform CLI on the runner
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_wrapper: false
       
       - name: Check Azure Account
         shell: powershell
@@ -33,23 +35,6 @@ jobs:
       # Check .tf files are formatted correctly
       - name: Terraform Format Check
         run: terraform fmt -check
-      
-      - name: Diagnose Terraform Executables
-        shell: powershell
-        run: |
-          Write-Host "=== setup-terraform executable ==="
-          Get-Item "$env:TERRAFORM_CLI_PATH\terraform" | Format-List FullName,Length,LastWriteTime
-
-          Write-Host "`n=== setup-terraform version ==="
-          & "$env:TERRAFORM_CLI_PATH\terraform" version
-          Write-Host "Exit code: $LASTEXITCODE"
-
-          Write-Host "`n=== Local Terraform executable ==="
-          Get-Item "C:\Software\terraform\terraform.exe" | Format-List FullName,Length,LastWriteTime
-
-          Write-Host "`n=== Local Terraform version ==="
-          & "C:\Software\terraform\terraform.exe" version
-          Write-Host "Exit code: $LASTEXITCODE"
 
       # Prepare Terraform working directory and download required providers/modules
       - name: Terraform Init
