@@ -46,6 +46,24 @@ jobs:
 
           Write-Host "`nTerraform version:"
           terraform version
+      
+      - name: Check Terraform Environment
+        shell: powershell
+        run: |
+          Write-Host "Current directory:"
+          Get-Location
+
+          Write-Host "`nFiles:"
+          Get-ChildItem -Force
+
+          Write-Host "`nTerraform executable:"
+          Get-Command terraform | Format-List Source
+
+          Write-Host "`nTerraform path:"
+          where.exe terraform
+
+          Write-Host "`nTerraform version:"
+          terraform version
 
       # Prepare Terraform working directory and download required providers/modules
       - name: Terraform Init
