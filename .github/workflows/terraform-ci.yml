@@ -34,19 +34,6 @@ jobs:
       - name: Terraform Format Check
         run: terraform fmt -check
       
-      # Show what Terraform directory the runner is actually using
-      - name: Check Terraform Working Directory
-        shell: powershell
-        run: |
-          Write-Host "Current directory:"
-          Get-Location
-
-          Write-Host "`nTerraform files:"
-          Get-ChildItem
-
-          Write-Host "`nTerraform version:"
-          terraform version
-      
       - name: Check Terraform Environment
         shell: powershell
         run: |
@@ -64,6 +51,21 @@ jobs:
 
           Write-Host "`nTerraform version:"
           terraform version
+
+      - name: Check Terraform
+        shell: powershell
+        run: |
+          Write-Host "Terraform executable:"
+          Get-Command terraform | Format-List Source
+
+          Write-Host "`nTerraform path:"
+          where.exe terraform
+
+          Write-Host "`nTerraform version:"
+          & terraform version
+
+          Write-Host "`nTerraform exit code:"
+          $LASTEXITCODE
 
       # Prepare Terraform working directory and download required providers/modules
       - name: Terraform Init
