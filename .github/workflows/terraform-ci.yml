@@ -3,7 +3,10 @@ name: Terraform CI
 on:
   push:
     branches:
-      - "feature/**"
+      - "feature/**"  # run on code pushed to any feature branch
+  pull_request:
+    branches:
+      - main  # run on pull requests to the main branch
 
 jobs:
   terraform-ci:
@@ -14,22 +17,27 @@ jobs:
         working-directory: infra
 
     steps:
+      # Pull the repository code onto the runner
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Install and configure the Terraform CLI on the runner
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
-
-      - name: Terraform Format Check
-        run: terraform fmt -check
       
       - name: Check Azure Account
         shell: powershell
         run: |
           az account show
 
+      # Check .tf files are formatted correctly
+      - name: Terraform Format Check
+        run: terraform fmt -check
+
+      # Prepare Terraform working directory and download required providers/modules
       - name: Terraform Init
         run: terraform init
 
+      # Check whether Terraform configuration is valid
       - name: Terraform Validate
         run: terraform validate
