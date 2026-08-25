@@ -34,38 +34,22 @@ jobs:
       - name: Terraform Format Check
         run: terraform fmt -check
       
-      - name: Check Terraform Environment
+      - name: Diagnose Terraform Executables
         shell: powershell
         run: |
-          Write-Host "Current directory:"
-          Get-Location
+          Write-Host "=== setup-terraform executable ==="
+          Get-Item "$env:TERRAFORM_CLI_PATH\terraform" | Format-List FullName,Length,LastWriteTime
 
-          Write-Host "`nFiles:"
-          Get-ChildItem -Force
+          Write-Host "`n=== setup-terraform version ==="
+          & "$env:TERRAFORM_CLI_PATH\terraform" version
+          Write-Host "Exit code: $LASTEXITCODE"
 
-          Write-Host "`nTerraform executable:"
-          Get-Command terraform | Format-List Source
+          Write-Host "`n=== Local Terraform executable ==="
+          Get-Item "C:\Software\terraform\terraform.exe" | Format-List FullName,Length,LastWriteTime
 
-          Write-Host "`nTerraform path:"
-          where.exe terraform
-
-          Write-Host "`nTerraform version:"
-          terraform version
-
-      - name: Check Terraform
-        shell: powershell
-        run: |
-          Write-Host "Terraform executable:"
-          Get-Command terraform | Format-List Source
-
-          Write-Host "`nTerraform path:"
-          where.exe terraform
-
-          Write-Host "`nTerraform version:"
-          & terraform version
-
-          Write-Host "`nTerraform exit code:"
-          $LASTEXITCODE
+          Write-Host "`n=== Local Terraform version ==="
+          & "C:\Software\terraform\terraform.exe" version
+          Write-Host "Exit code: $LASTEXITCODE"
 
       # Prepare Terraform working directory and download required providers/modules
       - name: Terraform Init
