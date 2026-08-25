@@ -33,6 +33,19 @@ jobs:
       # Check .tf files are formatted correctly
       - name: Terraform Format Check
         run: terraform fmt -check
+      
+      # Show what Terraform directory the runner is actually using
+      - name: Check Terraform Working Directory
+        shell: powershell
+        run: |
+          Write-Host "Current directory:"
+          Get-Location
+
+          Write-Host "`nTerraform files:"
+          Get-ChildItem
+
+          Write-Host "`nTerraform version:"
+          terraform version
 
       # Prepare Terraform working directory and download required providers/modules
       - name: Terraform Init
