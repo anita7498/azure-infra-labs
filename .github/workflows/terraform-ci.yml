@@ -25,7 +25,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_wrapper: false
+          terraform_wrapper: false    # Disable the Terraform wrapper script to use Terraform CLI directly
       
       - name: Check Azure Account
         shell: powershell
@@ -43,3 +43,13 @@ jobs:
       # Check whether Terraform configuration is valid
       - name: Terraform Validate
         run: terraform validate
+
+      # TFLint - Terraform static analysis and code quality checks
+      - name: Setup TFLint 
+        uses: terraform-linters/setup-tflint@v5
+
+      - name: Initialize TFLint
+        run: tflint --init
+
+      - name: Run TFLint
+        run: tflint --format compact
